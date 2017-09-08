@@ -6,7 +6,14 @@ class App extends React.Component{
   constructor(props) {
     super(props);
   
+   this.handleChange  = this.handleChange.bind(this);
+  this.handleSubmit = this.handleSubmit.bind(this);
+
     this.state = {
+      id: '',
+                        name: '',
+                        email: '',
+                        phone: '',
       participants : [
             {   id: '1',
             name: 'Jani', 
@@ -33,49 +40,8 @@ class App extends React.Component{
     
   }
 
-  addPar (emp){
 
-    console.log(emp);
-    alert(emp.id + emp.name + emp.email + emp.phone)
-  
-    
-    //   this.setState(function(state) {
-    //     return {
-    //         participants: [state.participants, emp]
-    //     }
-    // });
-
-     }
-
-  render() {
-
-              return (
-
-                  <div className="conta">
-                    <Header />
-                    <h3>List of participants</h3>
-            <AddNewParticipant addNew={this.addPar}/>
-            <EmpTable  participants={this.state.participants}/>
-          </div>    
-        );
-  
-  }
-}
-
-class AddNewParticipant extends React.Component{
-  constructor(props) {
-    super(props);
-  
-    this.state = {  
-              name : '',
-              email : '',
-            phone : '' }
-
-  this.handleChange  = this.handleChange.bind(this);
-  this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-    handleChange(event){
+  handleChange(event){
     const target = event.target;
     const name = target.name;
 
@@ -87,14 +53,18 @@ class AddNewParticipant extends React.Component{
   
   handleSubmit(event){
     const newEmp = {  
+              id : this.state.id,
               name : this.state.name,
               email : this.state.email,
               phone : this.state.phone 
             };
-    
-    //console.log(vart);
+ 
 
-    this.props.addNew(newEmp);
+    var part = this.state.participants;
+    newEmp.id = new Date().valueOf();
+    part.push(newEmp);
+
+    this.setState({participants : part});
 
 
 
@@ -102,12 +72,29 @@ class AddNewParticipant extends React.Component{
     
   }
 
+  render() {
+
+              return (
+
+            <div className="conta">
+                <Header />
+                <h3>List of participants</h3>
+                <AddNewParticipant handleChange={this.handleChange} handleSubmit={this.handleSubmit}/>
+                <EmpTable  participants={this.state.participants}/>
+          </div>    
+        );
+  
+  }
+}
+
+class AddNewParticipant extends React.Component{
+ 
   render (){
     return (
-      <form  onSubmit={this.handleSubmit}>
-        <input className="inputStyle" type="text" name="name" placeholder="Full Name" onChange={this.handleChange} />
-        <input className="inputStyle" type="email" name="email"  placeholder="Email-address" onChange={this.handleChange} />
-        <input className="inputStyle" type="phone" name="phone"  placeholder="Phone number" onChange={this.handleChange} />
+      <form  onSubmit={this.props.handleSubmit}>
+        <input className="inputStyle" type="text" name="name" placeholder="Full Name" onChange={this.props.handleChange} />
+        <input className="inputStyle" type="email" name="email"  placeholder="Email-address" onChange={this.props.handleChange} />
+        <input className="inputStyle" type="phone" name="phone"  placeholder="Phone number" onChange={this.props.handleChange} />
         <input className="inputStyle" type="submit" value="Add New"/>
       </form>
     );
