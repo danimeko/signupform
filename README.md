@@ -5,6 +5,8 @@ after downloading the whole folder from the terminal change your current working
 
 then 
 
-run npm start 
+npm intall
+
+npm run start 
 
 then  open http://localhost:3000/ to see the app.
